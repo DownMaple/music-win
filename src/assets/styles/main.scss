@@ -1,0 +1,125 @@
+@import "reset";
+@import 'ui-reset';
+html,body, #app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.dark-tabs .el-tabs__item {
+  background-color: $dark-tabs-bg !important;
+}
+.dark-tabs .el-tabs__header .is-active {
+  background-color: var(--el-menu-active-color) !important;
+  color: var(--el-menu-text-color) !important;
+}
+.component-box {
+  width: calc(100% - 30px);
+  height: 100%;
+  overflow: auto;
+  padding: 0 15px;
+}
+.dark .component-box {
+  background-color: initial !important;
+}
+.dark .index-box {
+  background-color: #1e1f22 !important;
+}
+.component-box-flex {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .table-search {
+    flex-shrink: 0;
+  }
+  .table-box {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+}
+.table-search__input {
+  width:220px ;
+}
+.drawer-foot-btnGroup {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+.input-tip {
+  font-size: 12px;
+  padding-top: 5px;
+  color: #999;
+}
+.my-table-search-box {
+  width: 100%;
+  height: auto;
+
+  .box-item {
+    margin-bottom: 15px;
+  }
+
+  .my-el-form-item {
+    width: 100%;
+    margin-right: 0;
+    .el-form-item__content {
+      width: 100%;
+      .el-cascader {
+        width: 100%;
+      }
+      .el-input {
+        width: 100%;
+      }
+    }
+  }
+
+  .search-btn {
+    flex: 1;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 20px;
+
+    .my-el-form-item {
+      width: auto;
+    }
+  }
+}
+.begin-btn {
+  width: 52px;
+  height: 32px;
+  border-radius: 18px;
+  text-align: center;
+  line-height: 32px;
+  background-color:#00F168 ;
+  cursor: pointer;
+}
+/* 定义滚动条的轨道（轨道就是滚动条的容器） */
+::-webkit-scrollbar {
+  width: 5px; /* 宽度 */
+  height: 5px; /* 高度，对于垂直滚动条 */
+}
+
+/* 定义滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: #999; /* 滑块颜色 */
+  border-radius: 5px; /* 圆角 */
+}
+
+/* 当鼠标悬停在滑块上时改变滑块颜色 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}
+
+/* 定义滚动条轨道的样式 */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 轨道颜色 */
+  border-radius: 5px; /* 圆角 */
+}
+
+.audio {
+  flex: 1;
+  background-color: #fff;
+}
+

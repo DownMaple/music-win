@@ -1,0 +1,33 @@
+{
+  "name": "music-win",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "@tauri-apps/api": "^1",
+    "@tauri-apps/cli-win32-x64-msvc": "^2.0.0-beta.20",
+    "ant-design-vue": "^4.2.3",
+    "axios": "^1.4.0",
+    "idb": "^8.0.0",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.1.0",
+    "sass": "^1.77.6",
+    "vue": "^3.3.4",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1",
+    "@types/node": "^20.14.9",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vue-tsc": "^2.0.22"
+  }
+}
