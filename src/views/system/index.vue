@@ -76,7 +76,7 @@
       </div>
     </div>
     <div class="index-grid-music">
-      <div class="music-item" v-for="item in musicList" :key="item.id">
+      <div class="music-item" v-for="item in music" :key="item.id">
         <div class="music-left">
           <img class="music-img" :src="item.img" alt="">
           <div class="music-left-mask">
@@ -102,16 +102,28 @@ import {onMounted, ref} from "vue";
 import {numberToChineseUnit} from "@/utils";
 import {getHomeRecommendation} from "@/api";
 import {musicStore} from "@/store/modules/music.ts";
+import {storeToRefs} from "pinia";
 
 const recommendation = ref<MusicType>({
   album_id: 0, author_id: 0, id: 0, img: "", issued_time: "", link: "", status: 0, title: "", views: 0
 })
 
+const { musicList , musicIndex } = storeToRefs(musicStore())
+
 function recommendationPlay() {
-  musicStore().setMusicAuthor(recommendation.value?.author_name ?? '')
+  if (musicList.value.findIndex((item) => item.id === recommendation.value.id) === -1) {
+    musicList.value.push(recommendation.value)
+  } else {
+    musicIndex.value = musicList.value.findIndex((item) => item.id === recommendation.value.id)
+  }
+  musicStore().setMusicAuthor(recommendation.value?.author_name ?? '未知')
   musicStore().setMusicTitle(recommendation.value.title)
   musicStore().setMusicLink(recommendation.value.link)
   musicStore().setMusicId(recommendation.value.id)
+  musicStore().setMusicImg(recommendation.value.img)
+  musicStore().setMusicIsCache(false)
+  musicStore().setMusicPlayTime("00:00")
+  musicStore().setMusicPlayTimeNum(0)
 }
 
 
@@ -178,7 +190,7 @@ const songList = ref([
   }
 ])
 
-const musicList = ref([
+const music = ref([
   {
     id: 1,
     title: 'See You Again',

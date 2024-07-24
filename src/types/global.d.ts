@@ -20,6 +20,7 @@ interface MusicType extends GlobalData {
 	 classify_id?: string,
 	 classify_title?: string,
 	 views: number,
+	 collection?: boolean,
 }
 
 

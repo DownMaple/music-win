@@ -6,6 +6,13 @@
   "description": "tuari 项目",
   "glyphs": [
     {
+      "icon_id": "13188714",
+      "name": "菜单收起",
+      "font_class": "unfold",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
       "icon_id": "34092322",
       "name": "静音",
       "font_class": "jingyin",

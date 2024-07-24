@@ -15,3 +15,13 @@ export const useWinStore = defineStore("useWinStore", () => {
     return {isWin,isMaxWin,setIsWin,setIsMaxWin}
   }
 })
+
+
+export const useLayoutStore = defineStore("useLayoutStore", () => {
+  const musicListVisible = ref(false)
+  function setMusicListVisible(val:boolean) {
+    musicListVisible.value = val
+  }
+  
+  return {musicListVisible,setMusicListVisible}
+})

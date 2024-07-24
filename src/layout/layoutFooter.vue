@@ -1,9 +1,9 @@
 <template>
-  <div class="footer" v-if="hasMusic">
-    <div class="footer-left">
+  <div class="footer" >
+    <div class="footer-left" v-if="hasMusic">
       <div class="music-item">
         <div class="music-left">
-          <img class="music-img" src="/image/303.jpeg" alt="">
+          <img class="music-img" :src="musicImg" alt="">
           <div class="music-left-mask">
             <ArrowsAltOutlined/>
           </div>
@@ -16,6 +16,16 @@
           <span class="iconfont icon-sc-act" v-if="false"></span>
           <span class="iconfont icon-sc" v-else></span>
           <span class="iconfont icon-gengduo"></span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-left" v-else>
+      <div class="music-item">
+        <div class="music-left">
+          <img class="music-img" src="/image/307.jpeg" alt="">
+        </div>
+        <div class="music-msg">
+          <p class="name">我的音乐，听我想听</p>
         </div>
       </div>
     </div>
@@ -55,7 +65,8 @@
         <a-popover trigger="click">
           <template #content>
             <div class="volume-regulation-box">
-              <a-slider class="volume-regulation__line" v-model:value="musicVolume" vertical="true" :tooltipOpen="false"
+              <a-slider class="volume-regulation__line" v-model:value="musicVolume" :vertical="true"
+                        :tooltipOpen="false"
                         @change="changeVolume"/>
               <div class="volume-regulation__num">
                 {{ musicVolume }}%
@@ -84,32 +95,35 @@
         <template #title>音频文件缓存中···</template>
         <a-spin/>
       </a-tooltip>
-      <MenuUnfoldOutlined/>
+      <span class="iconfont icon-unfold" @click.stop="musicListVisible = !musicListVisible"></span>
     </div>
-    <audio class="audio"
-           preload="auto"
-           ref="musicAudioRef"
-           :loop="musicPlayModel === 'SINGLE_LOOP'"
-           @error="musicError"
-           @ended="musicEnded"
-           @loadedmetadata="getDuration"
-           @timeupdate="updateProgress">
+    <audio
+        preload="auto"
+        ref="musicAudioRef"
+        :loop="musicPlayModel === 'SINGLE_LOOP'"
+        @ended="musicEnded"
+        @loadedmetadata="getDuration"
+        @timeupdate="updateProgress">
     </audio>
   </div>
 </template>
 <script setup lang="ts">
 
-import {nextTick, onMounted, ref, watch} from "vue";
+import {nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 import {blobDownFile, formatTime} from "@/utils";
 import {storeToRefs} from "pinia";
 import {musicStore} from "@/store/modules/music.ts";
 import {blobToArrayBuffer, getMusicFile, saveMusicFile} from "@/utils/db.ts";
 import {message} from "ant-design-vue";
+import {useLayoutStore} from "@/store/modules/system.ts";
+
+const {musicListVisible} = storeToRefs(useLayoutStore())
 
 const hasMusic = ref<boolean>(false)
 // 播放器相关
 const {
   musicId,
+  musicImg,
   musicAuthor,
   musicLink,
   musicAllTime,
@@ -159,10 +173,12 @@ function selectPlayMode(val: string) {
 
 // 控制播放器
 function beginPlay() {
-  if (musicAudioRef.value) {
-    musicPlay.value = !musicPlay.value;
-  } else {
-    console.log('音频播放器暂未开始播放')
+  if (hasMusic.value) {
+    if (musicAudioRef.value) {
+      musicPlay.value = !musicPlay.value;
+    } else {
+      console.log('音频播放器暂未开始播放')
+    }
   }
 }
 
@@ -171,6 +187,7 @@ function getDuration() {
   if (musicAudioRef.value) {
     musicAllTimeNum.value = musicAudioRef.value.duration
     musicAllTime.value = formatTime(musicAllTimeNum.value)
+    musicStep.value = musicAllTimeNum.value / 100
   }
 }
 
@@ -178,16 +195,22 @@ function getDuration() {
 const isCanUpdate = ref<boolean>(true)
 
 function musicTimeChange(val: number) {
-  if (musicIsCache.value) {
-    if (musicAudioRef.value) {
-      isCanUpdate.value = false
-      musicPlayTime.value = formatTime(val)
-      musicPlayTimeNum.value = val
-      // 先暂停音频播放，再更改进度
-      musicAudioRef.value.currentTime = val;
+  if (hasMusic.value) {
+    if (musicIsCache.value) {
+      if (musicAudioRef.value) {
+        isCanUpdate.value = false
+        musicPlayTime.value = formatTime(val)
+        musicPlayTimeNum.value = val
+        // 先暂停音频播放，再更改进度
+        musicAudioRef.value.pause();
+        musicAudioRef.value.currentTime = val;
+        nextTick(() => {
+          musicAudioRef.value?.play();
+        })
+      }
+    } else {
+      message.warning('音频文件尚未缓存完成，暂不能帮你跳转哦~');
     }
-  } else {
-    message.warning('音频文件尚未缓存完成，暂不能帮你跳转哦~');
   }
 }
 
@@ -219,7 +242,7 @@ function changeVolume(val: number) {
 async function cacheAndPlayMusic() {
   const cachedFile = await getMusicFile('music-' + musicId.value)
   if (!hasMusic.value) hasMusic.value = true
-  if (cachedFile) {
+  if (cachedFile && cachedFile.byteLength > 0) {
     playMusic(cachedFile);
   } else {
     await fetchAndCacheMusic('music-' + musicId.value, musicLink.value);
@@ -227,15 +250,19 @@ async function cacheAndPlayMusic() {
 }
 
 // 播放音乐
-function playMusic(arrayBuffer: any) {
+function playMusic(arrayBuffer: ArrayBuffer) {
   const blob = new Blob([arrayBuffer], {type: 'audio/mpeg'})
   const url = URL.createObjectURL(blob)
   musicIsCache.value = true
   if (musicAudioRef.value) {
     musicAudioRef.value.src = url
-    musicAudioRef.value.load()
     musicLink.value = url
-    musicPlay.value = true
+    musicAudioRef.value.load()
+    console.log(url)
+    nextTick(() => {
+      musicAudioRef.value?.play()
+      musicPlay.value = true
+    })
   }
 }
 
@@ -254,7 +281,7 @@ async function fetchAndCacheMusic(key: string, originalUrl: string) {
       const file = await blobToArrayBuffer(response);
       await saveMusicFile(key, file);
       isCaching.value = false
-      playMusic(response);
+      playMusic(file);
     } catch (error) {
       console.error('Failed to fetch and cache music:', error);
     }
@@ -263,25 +290,56 @@ async function fetchAndCacheMusic(key: string, originalUrl: string) {
 
 // 播放上一首
 function prevMusic() {
-  musicId.value = 1
-  musicTitle.value = '你就是远方'
-  musicAuthor.value = '就是南方凯'
-  musicLink.value = 'http://127.0.0.1:8000/static/music/%E5%B0%B1%E6%98%AF%E5%8D%97%E6%96%B9%E5%87%AF-%E4%BD%A0%E5%B0%B1%E6%98%AF%E8%BF%9C%E6%96%B9.flac'
+  if (hasMusic.value) {
+
+  }
 }
 
 // 播放下一首
 function nextMusic() {
-  musicId.value = 2
-  musicTitle.value = '这城市风总是很大'
-  musicAuthor.value = '隔壁老樊'
-  musicLink.value = 'http://127.0.0.1:8000/static/music/%E6%9E%AF%E6%9C%A8%E9%80%A2%E6%98%A5%20-%20%E8%BF%99%E5%9F%8E%E5%B8%82%E9%A3%8E%E6%80%BB%E6%98%AF%E5%BE%88%E5%A4%A7.mp3'
+  if (hasMusic.value) {
+
+  }
 }
+
+async function init() {
+  const cachedFile = await getMusicFile('music-' + musicId.value)
+  const blob = new Blob([cachedFile], {type: 'audio/mpeg'});
+  const url = URL.createObjectURL(blob);
+  if (musicAudioRef.value) {
+    musicAudioRef.value.src = url;
+    musicLink.value = url
+    musicAudioRef.value.currentTime = musicPlayTimeNum.value
+    await nextTick(() => {
+      musicAudioRef.value?.load()
+    })
+  }
+  musicIsCache.value = true
+}
+
+onMounted(() => {
+  if (musicId.value !== 0) {
+    hasMusic.value = true
+    init()
+  } else {
+    hasMusic.value = false
+  }
+})
+
+onUnmounted(() => {
+  musicAudioRef.value?.pause()
+  URL.revokeObjectURL(musicLink.value)
+  musicPlay.value = false
+})
+
 
 // 监听音乐路径变动
 watch(
     musicId,
     (newVal, oldVal) => {
-      if (newVal !== oldVal) {
+      if (newVal === 0) {
+        hasMusic.value = false
+      } else if (newVal !== oldVal) {
         cacheAndPlayMusic()
       } else {
         if (musicAudioRef.value) {
@@ -304,33 +362,6 @@ watch(
     }
 )
 
-// 监听播放器错误信息
-function musicError(e: Event) {
-  console.log(e)
-}
-
-async function init() {
-  const cachedFile = await getMusicFile('music-' + musicId.value)
-  const blob = new Blob([cachedFile], {type: 'audio/mpeg'});
-  const url = URL.createObjectURL(blob);
-  if (musicAudioRef.value) {
-    musicAudioRef.value.src = url;
-    musicLink.value = url
-    await nextTick(() => {
-      musicAudioRef.value?.load()
-    })
-  }
-  musicIsCache.value = true
-}
-
-onMounted(() => {
-  if (musicId.value !== 0) {
-    hasMusic.value = true
-    init()
-  } else {
-    hasMusic.value = false
-  }
-})
 </script>
 <style scoped lang="scss">
 .footer {
@@ -400,7 +431,6 @@ onMounted(() => {
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 1;
           overflow: hidden;
-          margin-bottom: 5px;
         }
 
         .author {
@@ -412,6 +442,7 @@ onMounted(() => {
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 1;
           overflow: hidden;
+          margin-top: 5px;
         }
       }
 
@@ -510,14 +541,14 @@ onMounted(() => {
     flex: 1;
     text-align: right;
 
-    .anticon {
+    .iconfont {
       cursor: pointer;
       color: #888;
       font-size: 20px;
       margin-left: 20px;
     }
 
-    .anticon:hover {
+    .iconfont:hover {
       color: $color;
     }
   }

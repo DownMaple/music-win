@@ -5,3 +5,15 @@
 		}
 	}
 }
+
+.music-list-drawer {
+	padding-bottom: 90px;
+	.ant-drawer-content-wrapper {
+		bottom: 90px;
+		border-radius: 0 0 0 10px;
+		overflow: hidden;
+	}
+	.custom-class {
+		border-radius: 10px;
+	}
+}
