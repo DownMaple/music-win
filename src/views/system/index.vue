@@ -31,10 +31,10 @@
             </div>
           </div>
         </div>
-        <div class="grid-item-down">
+        <router-link to="/songList/1" class="grid-item-down">
           <p class="p1">不负人间 -- 啊YueYue</p>
           <p class="p2">每日30首</p>
-        </div>
+        </router-link>
       </div>
       <div class="index-grid-item">
         <div class="gird-item-up">
@@ -309,6 +309,7 @@ const music = ref([
   }
 
   .grid-item-down {
+    display: block;
     flex-shrink: 0;
     margin-top: 10px;
 
@@ -316,6 +317,11 @@ const music = ref([
       font-size: 12px;
       line-height: 20px;
       color: #888;
+      cursor: pointer;
+    }
+
+    p:hover {
+      color: $color;
     }
 
     .p1 {

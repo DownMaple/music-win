@@ -11,6 +11,11 @@ export const menus = [
         name: 'Index',
         component: () => import('@/views/system/index.vue')
       },
+      {
+        path: '/songList/:id',
+        name: 'SongList',
+        component: () => import('@/views/system/songList.vue')
+      }
       // {
       //   path: '/:pathMatch(.*)*',
       //   name: '404',

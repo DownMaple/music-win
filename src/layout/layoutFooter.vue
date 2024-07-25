@@ -1,5 +1,5 @@
 <template>
-  <div class="footer" >
+  <div class="footer">
     <div class="footer-left" v-if="hasMusic">
       <div class="music-item">
         <div class="music-left">
@@ -91,7 +91,7 @@
       </div>
     </div>
     <div class="footer-right">
-      <a-tooltip v-if="!musicIsCache">
+      <a-tooltip v-if="!musicIsCache && hasMusic">
         <template #title>音频文件缓存中···</template>
         <a-spin/>
       </a-tooltip>
@@ -136,7 +136,8 @@ const {
   musicVolume,
   musicStep,
   musicIsCache,
-  musicMuted
+  musicMuted,
+  musicIndex,
 } = storeToRefs(musicStore())
 const musicAudioRef = ref<HTMLAudioElement | null>()
 
@@ -258,7 +259,6 @@ function playMusic(arrayBuffer: ArrayBuffer) {
     musicAudioRef.value.src = url
     musicLink.value = url
     musicAudioRef.value.load()
-    console.log(url)
     nextTick(() => {
       musicAudioRef.value?.play()
       musicPlay.value = true
@@ -291,14 +291,18 @@ async function fetchAndCacheMusic(key: string, originalUrl: string) {
 // 播放上一首
 function prevMusic() {
   if (hasMusic.value) {
-
+    if (musicIndex.value > 0) {
+      musicStore().changeMusic(musicIndex.value - 1)
+    } else {
+      message.warning('已经是列表的第一首了，无法播放上一首哦~');
+    }
   }
 }
 
 // 播放下一首
 function nextMusic() {
   if (hasMusic.value) {
-
+    musicStore().changeMusic(musicIndex.value + 1)
   }
 }
 

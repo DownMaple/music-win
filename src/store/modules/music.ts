@@ -97,6 +97,19 @@ export const musicStore = defineStore('music', {
 		setMusicImg(img: string) {
 			this.musicImg = img
 		},
+		// 切换音乐
+		changeMusic(num: number) {
+			let index = num > this.musicList.length - 1 ? 0 : num
+			this.musicId = this.musicList[index].id
+			this.musicLink = this.musicList[index].link
+			this.musicTitle = this.musicList[index].title
+			this.musicAuthor = this.musicList[index]?.author_name ?? '未知'
+			this.musicImg = this.musicList[index].img
+			this.musicIndex = index
+			this.musicPlayTime = '00:00'
+			this.musicPlayTimeNum = 0
+			this.musicIsCache = false
+		},
 	},
 	persist: true
 })

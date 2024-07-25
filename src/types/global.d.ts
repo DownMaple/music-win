@@ -23,6 +23,16 @@ interface MusicType extends GlobalData {
 	 collection?: boolean,
 }
 
+interface SongListType extends GlobalData {
+	title: string,
+	img: string,
+	description: string,
+	author?: string,
+	classify_id?: string,
+	classify_title?: string,
+	collection?: boolean,
+	music_list?: MusicType[]
+}
 
 type ResType = {
 	code:number,
