@@ -3,7 +3,7 @@
     <div class="menu-logo" data-tauri-drag-region>Tauri音乐</div>
     <div class="menu-list">
       <div class="menu-list__title">在线音乐</div>
-      <router-link to="index" class="menu-list__item" :class="{'menu-list__activity': path === 'index'}">
+      <router-link to="/index" class="menu-list__item" :class="{'menu-list__activity': path === '/index'}">
         <HomeOutlined/>
         <HomeFilled/>
         <span class="span">首页</span>
@@ -40,7 +40,6 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 const path = router.currentRoute.value.fullPath
-
 </script>
 
 <style scoped lang="scss">

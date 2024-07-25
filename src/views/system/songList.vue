@@ -2,7 +2,7 @@
   <div class="component-box">
     <div class="sl-up">
       <div class="sl-up-left">
-        <img class="sl-up-left__img" :src="songListData.img" alt="">
+        <img class="sl-up-left__img" :src="stitchTheImageUrl(songListData.img)" alt="">
       </div>
       <div class="sl-up-right">
         <div class="sl-up__name">{{ songListData.title }}</div>
@@ -39,11 +39,11 @@
           <div class="sl-table__th">时长</div>
         </div>
         <div class="sl-table-tbody">
-          <div class="sl-table-tr" v-for="item in songListMusic" :key="item.id">
+          <div class="sl-table-tr" :class="{'sl-table-tr-act':item.id === musicId}" v-for="item in songListMusic" :key="item.id">
             <div class="sl-table__td">
               <div class="music-item">
                 <div class="music-left">
-                  <img class="music-img" :src="item.img" alt="">
+                  <img class="music-img" :src="stitchTheImageUrl(item.img)" alt="">
                   <div class="music-left-mask">
                     <span class="iconfont icon-weibiaoti519" v-if="musicPlay && item.id === musicId"></span>
                     <span class="iconfont icon-bofang" v-else></span>
@@ -79,6 +79,7 @@ import {storeToRefs} from "pinia";
 import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import {getSongListOne} from "@/api/songList.ts";
+import {stitchTheImageUrl} from "@/utils";
 
 const {musicIndex, musicPlay, musicId} = storeToRefs(musicStore())
 const router = useRouter()
@@ -320,9 +321,6 @@ onMounted(() => {
           font-size: 16px;
         }
 
-        .icon-weibiaoti519 {
-          display: none;
-        }
       }
     }
 
@@ -403,33 +401,6 @@ onMounted(() => {
       }
     }
   }
-
-  .music-item-act {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-
-    .music-left {
-      .music-left-mask {
-        display: flex;
-
-        .icon-weibiaoti519 {
-          display: inline-block;
-        }
-      }
-    }
-
-    .name {
-      color: $color !important;
-    }
-
-    .author {
-      color: $color !important;
-    }
-
-    .music-right {
-      display: block;
-    }
-  }
 }
 
 .sl-table-tr:hover {
@@ -443,6 +414,30 @@ onMounted(() => {
 
   .music-right {
     visibility: visible;
+  }
+}
+
+.sl-table-tr-act {
+  background-color: #f2f2f2;
+
+  .music-left {
+    .music-left-mask {
+      display: flex !important;
+    }
+  }
+  .name {
+    color: $color !important;
+  }
+
+  .author {
+    color: $color !important;
+  }
+
+  .music-right {
+    visibility: visible;
+  }
+  .sl-table__td {
+    color: $color !important;
   }
 }
 </style>

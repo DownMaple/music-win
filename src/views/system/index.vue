@@ -12,7 +12,7 @@
             </div>
           </div>
           <div class="t-right">
-            <img class="t-right__img" :src="recommendation.img" alt="">
+            <img class="t-right__img" :src="stitchTheImageUrl(recommendation.img)" alt="">
             <img class="t-right__film" src="/image/film.png" alt="">
           </div>
         </div>
@@ -99,7 +99,7 @@
 <script setup lang="ts">
 
 import {onMounted, ref} from "vue";
-import {numberToChineseUnit} from "@/utils";
+import {numberToChineseUnit, stitchTheImageUrl} from "@/utils";
 import {getHomeRecommendation} from "@/api";
 import {musicStore} from "@/store/modules/music.ts";
 import {storeToRefs} from "pinia";

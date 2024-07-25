@@ -222,3 +222,11 @@ export function formatTime(seconds: number): string {
   const paddedSeconds = remainingSeconds.toString().padStart(2, '0');
   return `${paddedMinutes}:${paddedSeconds}`;
 }
+
+/**
+ * 拼接图片地址
+ * @param url
+ */
+export function stitchTheImageUrl(url: string) {
+  return url === '' ? '' : config.url + url;
+}

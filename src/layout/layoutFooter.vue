@@ -3,7 +3,7 @@
     <div class="footer-left" v-if="hasMusic">
       <div class="music-item">
         <div class="music-left">
-          <img class="music-img" :src="musicImg" alt="">
+          <img class="music-img" :src="stitchTheImageUrl(musicImg)" alt="">
           <div class="music-left-mask">
             <ArrowsAltOutlined/>
           </div>
@@ -110,7 +110,7 @@
 <script setup lang="ts">
 
 import {nextTick, onMounted, onUnmounted, ref, watch} from "vue";
-import {blobDownFile, formatTime} from "@/utils";
+import {blobDownFile, formatTime, stitchTheImageUrl} from "@/utils";
 import {storeToRefs} from "pinia";
 import {musicStore} from "@/store/modules/music.ts";
 import {blobToArrayBuffer, getMusicFile, saveMusicFile} from "@/utils/db.ts";

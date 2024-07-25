@@ -26,7 +26,7 @@
         <div class="music-item" v-for="(item,index) in musicList" :key="item.id"
              :class="{'music-item-act':index === musicIndex}">
           <div class="music-left">
-            <img class="music-img" :src="item.img" alt="">
+            <img class="music-img" :src="stitchTheImageUrl(item.img)" alt="">
             <div class="music-left-mask" @click="playMusic(item,index)">
               <span class="iconfont icon-weibiaoti519" v-if="musicPlay && index === musicIndex"></span>
               <span class="iconfont icon-bofang" v-else></span>
@@ -52,6 +52,7 @@ import {storeToRefs} from "pinia";
 import {musicStore} from "@/store/modules/music.ts";
 import {ref, watch} from "vue";
 import {useLayoutStore} from "@/store/modules/system.ts";
+import {stitchTheImageUrl} from "@/utils";
 
 const {musicList, musicIndex, musicPlay} = storeToRefs(musicStore())
 const drawerRef = ref<HTMLElement>()
