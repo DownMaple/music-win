@@ -13,7 +13,7 @@
           {{ songListData.description }}
         </div>
         <div class="sl-up-right-btn">
-          <div class="sl-up__btn">
+          <div class="sl-up__btn" @click="playAllMusic">
             <span class="iconfont icon-bofang"></span>
             <span>播放</span>
           </div>
@@ -44,7 +44,7 @@
               <div class="music-item">
                 <div class="music-left">
                   <img class="music-img" :src="stitchTheImageUrl(item.img)" alt="">
-                  <div class="music-left-mask">
+                  <div class="music-left-mask" @click="playMusic(item)">
                     <span class="iconfont icon-weibiaoti519" v-if="musicPlay && item.id === musicId"></span>
                     <span class="iconfont icon-bofang" v-else></span>
                   </div>
@@ -79,9 +79,9 @@ import {storeToRefs} from "pinia";
 import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import {getSongListOne} from "@/api/songList.ts";
-import {stitchTheImageUrl} from "@/utils";
+import {deepCopy, stitchTheImageUrl} from "@/utils";
 
-const {musicIndex, musicPlay, musicId} = storeToRefs(musicStore())
+const {musicIndex, musicPlay, musicId , musicList} = storeToRefs(musicStore())
 const router = useRouter()
 const id = ref(0)
 const songListData = ref<SongListType>({
@@ -89,20 +89,21 @@ const songListData = ref<SongListType>({
   description: "", id: 0, status: 0, title: ""
 })
 const songListMusic = ref<MusicType[]>([])
-// 切换播放音乐
-function playMusic(item: MusicType, index: number) {
-  if (musicIndex.value === index) {
-    musicPlay.value = !musicPlay.value
+
+// 播放全部
+function playAllMusic() {
+  musicList.value = deepCopy(songListMusic.value)
+  musicStore().changeMusic(0)
+}
+
+// 播放音乐
+function playMusic(music: MusicType) {
+  let listIndex = musicList.value.findIndex((item) => item.id === music.id)
+  if (listIndex >= 0) {
+    musicStore().changeMusic(listIndex)
   } else {
-    musicStore().setMusicIndex(index)
-    musicStore().setMusicId(item.id)
-    musicStore().setMusicLink(item.link)
-    musicStore().setMusicImg(item.img)
-    musicStore().setMusicTitle(item.title)
-    musicStore().setMusicAuthor(item.author_name ?? '未知')
-    musicStore().setMusicIsCache(false)
-    musicStore().setMusicPlayTime("00:00")
-    musicStore().setMusicPlayTimeNum(0)
+    musicList.value.splice(musicIndex.value + 1, 0 ,music)
+    musicStore().changeMusic(musicIndex.value + 1)
   }
 }
 

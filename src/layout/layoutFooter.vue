@@ -86,6 +86,7 @@
       <div class="fc-down">
         <span class="time">{{ musicPlayTime }}</span>
         <a-slider v-model:value="musicPlayTimeNum" :max="musicAllTimeNum" :step="musicStep" class="slider"
+                  @change="beforeChangeTime"
                   :tooltipOpen="false" @afterChange="musicTimeChange"/>
         <span class="time">{{ musicAllTime }}</span>
       </div>
@@ -192,6 +193,10 @@ function getDuration() {
   }
 }
 
+function beforeChangeTime() {
+  isCanUpdate.value = false
+}
+
 // 音频播放时间更新
 const isCanUpdate = ref<boolean>(true)
 
@@ -206,7 +211,10 @@ function musicTimeChange(val: number) {
         musicAudioRef.value.pause();
         musicAudioRef.value.currentTime = val;
         nextTick(() => {
+          musicAudioRef.value?.click()
           musicAudioRef.value?.play();
+          if (!musicPlay.value) musicPlay.value = true
+          isCanUpdate.value = true
         })
       }
     } else {
@@ -217,9 +225,11 @@ function musicTimeChange(val: number) {
 
 // 监听播放进度
 function updateProgress() {
-  if (musicAudioRef.value && isCanUpdate.value) {
+  if (musicAudioRef.value) {
     musicPlayTime.value = formatTime(musicAudioRef.value.currentTime)
-    musicPlayTimeNum.value = musicAudioRef.value.currentTime;
+    if (isCanUpdate.value) {
+      musicPlayTimeNum.value = musicAudioRef.value.currentTime;
+    }
   }
 }
 
@@ -260,6 +270,7 @@ function playMusic(arrayBuffer: ArrayBuffer) {
     musicLink.value = url
     musicAudioRef.value.load()
     nextTick(() => {
+      musicAudioRef.value?.click()
       musicAudioRef.value?.play()
       musicPlay.value = true
     })
@@ -277,10 +288,12 @@ async function fetchAndCacheMusic(key: string, originalUrl: string) {
         musicPlay.value = true
         musicIsCache.value = false
       }
+      console.log('开始缓存音频文件...')
       const response = await blobDownFile(originalUrl);
       const file = await blobToArrayBuffer(response);
       await saveMusicFile(key, file);
       isCaching.value = false
+      console.log('音频文件缓存成功！');
       playMusic(file);
     } catch (error) {
       console.error('Failed to fetch and cache music:', error);
@@ -292,6 +305,7 @@ async function fetchAndCacheMusic(key: string, originalUrl: string) {
 function prevMusic() {
   if (hasMusic.value) {
     if (musicIndex.value > 0) {
+      URL.revokeObjectURL(musicLink.value)
       musicStore().changeMusic(musicIndex.value - 1)
     } else {
       message.warning('已经是列表的第一首了，无法播放上一首哦~');
@@ -301,6 +315,7 @@ function prevMusic() {
 
 // 播放下一首
 function nextMusic() {
+  URL.revokeObjectURL(musicLink.value)
   if (hasMusic.value) {
     musicStore().changeMusic(musicIndex.value + 1)
   }
@@ -358,6 +373,7 @@ watch(
     (newVal) => {
       if (musicAudioRef.value) {
         if (newVal) {
+          musicAudioRef.value.click()
           musicAudioRef.value.play()
         } else {
           musicAudioRef.value.pause()
