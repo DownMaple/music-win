@@ -87,6 +87,7 @@ const winDomRef = ref<HTMLElement>()
     width: 100%;
     height: 100%;
     background-color: #473840;
+    //background-color: #666;
   }
 
   .layout-lyrics {

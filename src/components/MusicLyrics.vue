@@ -20,7 +20,9 @@
         <div class="mlm__author">{{ musicAuthor ?? '未知' }}</div>
         <div class="mlm-list-box">
           <div class="mlm-list-time"></div>
-          <div class="mlm-list">
+          <div class="mlm-list-mask-up"></div>
+          <div class="mlm-list-mask-down"></div>
+          <div ref="lyricsListRef" class="mlm-list" @mouseenter="lyricsListHour = true" @mouseleave="lyricsListHour = false">
             <div class="mlm-list-row" v-for="(line, index) in lyrics" :key="index">
               <span v-for="(txt, txtIndex) in line" :key="txtIndex"
                     class="lyrics-txt"
@@ -43,9 +45,9 @@
 import {appWindow} from "@tauri-apps/api/window";
 import {useLayoutStore, useWinStore} from "@/store/modules/system.ts";
 import {storeToRefs} from "pinia";
-import {musicStore} from "@/store/modules/music.ts";
+import {musicLyricsStore, musicStore} from "@/store/modules/music.ts";
 import {parseLyrics, stitchTheImageUrl} from "@/utils";
-import {onMounted, ref, watch} from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
 import {getMusicLyricsAPI} from "@/api/music.ts";
 
 const {isWin} = storeToRefs(useWinStore())
@@ -69,11 +71,11 @@ function closeWindow() {
   appWindow.close()
 }
 
-const lineIndex = ref(0)
-const wordIndex = ref(0)
+const {lineIndex,wordIndex} = storeToRefs(musicLyricsStore())
+// 判断是否显示歌词动画，判断歌词是否已经播放
 function isActiveWord(txt: MusicLyricsType, txtIndex: number, index: number) {
   if (txt.word !== '') {
-    if (musicPlayTimeNum.value > txt.time &&  musicPlayTimeNum.value < lyrics.value[index][txtIndex + 1].time) {
+    if (musicPlayTimeNum.value > txt.time && musicPlayTimeNum.value < lyrics.value[index][txtIndex + 1].time) {
       lineIndex.value = index
       wordIndex.value = txtIndex
       return 'lyrics-txt-animation'
@@ -83,6 +85,7 @@ function isActiveWord(txt: MusicLyricsType, txtIndex: number, index: number) {
   }
 }
 
+// 获取歌词动画时间
 function getAnimationDuration(time: number, txt: string, txtIndex: number, index: number) {
   if (txt !== '') {
     return lyrics.value[index][txtIndex + 1].time - time
@@ -91,10 +94,25 @@ function getAnimationDuration(time: number, txt: string, txtIndex: number, index
   }
 }
 
+const lyricsListRef = ref<HTMLElement>()
+// 控制鼠标移入歌词列表后，歌词列表不跟随音乐播放滚动
+const lyricsListHour= ref(false)
+// 控制歌词跟随音乐播放滚动
+function scrollList() {
+  if (lyricsListRef.value && !lyricsListHour.value) {
+    let rowsHeight = lyricsListRef.value.scrollHeight / lyrics.value.length
+    lyricsListRef.value.scrollTop = rowsHeight * lineIndex.value - 160
+  }
+}
+
 async function init() {
   const {data: res} = await getMusicLyricsAPI(musicId.value)
   if (res.code === 200) {
     lyrics.value = parseLyrics(res.message)
+    await nextTick(() => {
+      if (lyrics.value.length > 0 && lineIndex.value > 0 && musicPlayTimeNum.value > 0)
+      scrollList()
+    })
   }
 }
 
@@ -104,6 +122,13 @@ watch(
       if (newValue !== 0) {
         init()
       }
+    }
+)
+
+watch(
+    () => lineIndex.value,
+    () => {
+      scrollList()
     }
 )
 
@@ -186,13 +211,37 @@ onMounted(() => {
       }
 
       .mlm-list-box {
-        padding: 40px;
         width: 100%;
-        max-height: 300px;
-        overflow: auto;
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
+        position: relative;
+        padding-left: 40px;
+
+        .mlm-list-mask-up {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: calc(100% - 40px);
+          height: 80px;
+          z-index: 9;
+          background: linear-gradient(rgba(71, 56, 64, 1), rgba(71, 56, 64, 0));
+        }
+
+        .mlm-list-mask-down {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: calc(100% - 40px);
+          height: 60px;
+          z-index: 9;
+          background: linear-gradient(rgba(71, 56, 64, 0), rgba(71, 56, 64, 1));
+        }
+
         .mlm-list {
+          padding: 40px 0;
+          width: 100%;
+          max-height: 240px;
+          overflow: auto;
+          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none; /* Firefox */
           font-size: 18px;
           color: #fff;
 

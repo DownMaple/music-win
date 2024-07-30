@@ -4,7 +4,7 @@
       <div class="music-item">
         <div class="music-left">
           <img class="music-img" :src="stitchTheImageUrl(musicImg)" alt="">
-          <div class="music-left-mask">
+          <div class="music-left-mask" @click="musicLyricVisible = !musicLyricVisible">
             <ShrinkOutlined/>
             <ArrowsAltOutlined/>
           </div>

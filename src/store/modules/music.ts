@@ -113,3 +113,24 @@ export const musicStore = defineStore('music', {
 	},
 	persist: true
 })
+
+export const musicLyricsStore = defineStore('musicLyrics', {
+	state: (): {
+		lineIndex: number,
+		wordIndex: number,
+	} => {
+		return {
+			lineIndex: 0,
+			wordIndex: 0,
+		}
+	},
+	actions: {
+		setLineIndex(index: number) {
+			this.lineIndex = index
+		},
+		setWordIndex(index: number) {
+			this.wordIndex = index
+		}
+	},
+	persist: true
+})
