@@ -19,7 +19,7 @@ export const useWinStore = defineStore("useWinStore", () => {
 
 export const useLayoutStore = defineStore("useLayoutStore", () => {
   const musicListVisible = ref(false)
-  const musicLyricVisible = ref(true)
+  const musicLyricVisible = ref(false)
   function setMusicListVisible(val:boolean) {
     musicListVisible.value = val
   }

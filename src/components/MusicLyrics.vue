@@ -101,7 +101,7 @@ const lyricsListHour= ref(false)
 function scrollList() {
   if (lyricsListRef.value && !lyricsListHour.value) {
     let rowsHeight = lyricsListRef.value.scrollHeight / lyrics.value.length
-    lyricsListRef.value.scrollTop = rowsHeight * lineIndex.value - 160
+    lyricsListRef.value.scrollTop = rowsHeight * lineIndex.value - 120
   }
 }
 
