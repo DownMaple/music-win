@@ -6,3 +6,4 @@ import {getJson} from "@/utils/request.ts";
 export const getHomeRecommendation = () =>  {
 	return getJson('/music/getOne', {id: 1})
 }
+

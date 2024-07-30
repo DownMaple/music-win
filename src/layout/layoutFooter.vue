@@ -1,10 +1,11 @@
 <template>
-  <div class="footer">
+  <div class="footer" :class="{ 'footer-lyrics-visible': musicLyricVisible }" >
     <div class="footer-left" v-if="hasMusic">
       <div class="music-item">
         <div class="music-left">
           <img class="music-img" :src="stitchTheImageUrl(musicImg)" alt="">
           <div class="music-left-mask">
+            <ShrinkOutlined/>
             <ArrowsAltOutlined/>
           </div>
         </div>
@@ -118,7 +119,7 @@ import {blobToArrayBuffer, getMusicFile, saveMusicFile} from "@/utils/db.ts";
 import {message} from "ant-design-vue";
 import {useLayoutStore} from "@/store/modules/system.ts";
 
-const {musicListVisible} = storeToRefs(useLayoutStore())
+const {musicListVisible, musicLyricVisible} = storeToRefs(useLayoutStore())
 
 const hasMusic = ref<boolean>(false)
 // 播放器相关
@@ -385,6 +386,7 @@ watch(
 </script>
 <style scoped lang="scss">
 .footer {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -432,6 +434,11 @@ watch(
           .anticon-arrows-alt {
             color: #fff;
             font-size: 26px;
+          }
+          .anticon-shrink {
+            color: #fff;
+            font-size: 26px;
+            display: none;
           }
         }
       }
@@ -485,6 +492,9 @@ watch(
 
         .icon-gengduo {
           margin-left: 20px;
+        }
+        .icon-gengduo:hover {
+          color: $color;
         }
       }
     }
@@ -573,8 +583,104 @@ watch(
     }
   }
 }
+.footer-lyrics-visible {
+  .footer-left {
+    .music-item {
+      .music-left {
+        .music-img {
+          display: none;
+        }
 
-:deep( .ant-slider ) {
+        .music-left-mask {
+          display: flex;
+          background: none;
+
+          .anticon-arrows-alt {
+            color: #fff;
+            font-size: 26px;
+            display: none;
+          }
+          .anticon-shrink {
+            color: #fff;
+            font-size: 26px;
+            display: block;
+          }
+        }
+      }
+      .music-msg {
+        .author {
+          color: #9B958C;
+        }
+      }
+      .music-right {
+        .iconfont {
+          color: #fff;
+        }
+
+      }
+    }
+  }
+  .footer-center {
+
+    .fc-up {
+      .fc-up-icon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        & > .iconfont {
+          color: #fff;
+        }
+
+      }
+    }
+
+    .fc-down {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+
+      .time {
+        flex-shrink: 0;
+        font-size: 12px;
+      }
+
+      .slider {
+        flex: 1;
+        margin: 0 10px;
+      }
+    }
+  }
+  .footer-right {
+    .iconfont {
+      color: #fff;
+    }
+  }
+
+  :deep(.ant-slider ) {
+    .ant-slider-handle {
+      display: none;
+    }
+
+    .ant-slider-track {
+      background-color: #fff;
+    }
+
+    .ant-slider-handle::after {
+      box-shadow: 0 0 0 2px #fff;
+    }
+
+    .ant-slider-handle:focus::after {
+      box-shadow: none !important;
+    }
+
+    .ant-slider-handle:hover::after {
+      box-shadow: none !important;
+    }
+  }
+}
+:deep(.ant-slider ) {
   .ant-slider-handle {
     display: none;
   }
@@ -601,7 +707,6 @@ watch(
     display: block;
   }
 }
-
 
 .play-order-item {
   padding: 10px 15px;

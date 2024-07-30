@@ -39,3 +39,9 @@ type ResType = {
 	data: any,
 	msg: string
 }
+
+
+type MusicLyricsType = {
+	time: number,
+	word: string
+}
