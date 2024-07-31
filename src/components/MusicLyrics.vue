@@ -23,7 +23,7 @@
           <div class="mlm-list-mask-up"></div>
           <div class="mlm-list-mask-down"></div>
           <div ref="lyricsListRef" class="mlm-list" @mouseenter="lyricsListHour = true" @mouseleave="lyricsListHour = false">
-            <div class="mlm-list-row" v-for="(line, index) in lyrics" :key="index">
+            <div class="mlm-list-row" v-for="(line, index) in lyrics" :key="index" :class="{ 'mlm-list-row-active': lineIndex === index}">
               <span v-for="(txt, txtIndex) in line" :key="txtIndex"
                     class="lyrics-txt"
                     :class="isActiveWord(txt,txtIndex,index)"
@@ -251,6 +251,10 @@ onMounted(() => {
             & > span {
               margin-right: 2px;
             }
+          }
+          .mlm-list-row-active {
+            font-size: 20px;
+            padding: 10px 0;
           }
         }
       }

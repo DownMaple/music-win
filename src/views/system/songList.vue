@@ -267,6 +267,12 @@ onMounted(() => {
           width: 240px;
           font-size: 12px;
           color: #666;
+          word-break: break-all;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          overflow: hidden;
         }
 
         .sl-table__td:last-child {
