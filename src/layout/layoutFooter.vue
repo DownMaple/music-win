@@ -16,7 +16,7 @@
         <div class="music-right">
           <span class="iconfont icon-sc-act" v-if="false"></span>
           <span class="iconfont icon-sc" v-else></span>
-          <span class="iconfont icon-gengduo"></span>
+          <more-menu :id="musicId" :font-size="18"></more-menu>
         </div>
       </div>
     </div>
@@ -118,6 +118,7 @@ import {musicStore} from "@/store/modules/music.ts";
 import {blobToArrayBuffer, getMusicFile, saveMusicFile} from "@/utils/db.ts";
 import {message} from "ant-design-vue";
 import {useLayoutStore} from "@/store/modules/system.ts";
+import MoreMenu from "@/components/moreMenu.vue";
 
 const {musicListVisible, musicLyricVisible} = storeToRefs(useLayoutStore())
 
@@ -490,12 +491,6 @@ watch(
           color: #F85C55;
         }
 
-        .icon-gengduo {
-          margin-left: 20px;
-        }
-        .icon-gengduo:hover {
-          color: $color;
-        }
       }
     }
   }

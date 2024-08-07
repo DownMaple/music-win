@@ -14,7 +14,7 @@
         <span class="head-user__name">沙雕萝卜头</span>
       </div>
       <SettingOutlined/>
-      <template v-if="isWin">
+      <template v-isWin>
         <MinusOutlined @click="minWindow()"/>
         <FullscreenExitOutlined @click="toggleMaximizeWindow()"  v-if="maxWin"/>
         <FullscreenOutlined @click="toggleMaximizeWindow()" v-else />
@@ -28,8 +28,6 @@
 import {appWindow} from "@tauri-apps/api/window";
 import {useWinStore} from "@/store/modules/system.ts";
 import {storeToRefs} from "pinia";
-
-const {isWin} = storeToRefs(useWinStore())
 const {isMaxWin: maxWin} = storeToRefs(useWinStore())
 
 // 最小化窗口

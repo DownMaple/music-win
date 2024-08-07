@@ -58,7 +58,8 @@
                   <span class="iconfont icon-sc"></span>
                 </div>
                 <div class="music-right">
-                  <span class="iconfont icon-gengduo"></span>
+                  <span class="iconfont icon-xiazai" v-downMusicFile:id="item.id"></span>
+                  <more-menu :id="item.id" :font-size="22"></more-menu>
                 </div>
               </div>
             </div>
@@ -80,6 +81,7 @@ import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import {getSongListOne} from "@/api/songList.ts";
 import {deepCopy, stitchTheImageUrl} from "@/utils";
+import MoreMenu from "@/components/moreMenu.vue";
 
 const {musicIndex, musicPlay, musicId , musicList} = storeToRefs(musicStore())
 const router = useRouter()
@@ -364,7 +366,6 @@ onMounted(() => {
     }
     .music-right-center {
       flex-shrink: 0;
-      margin-right: 15px;
 
       .iconfont {
         font-size: 22px;
@@ -382,30 +383,27 @@ onMounted(() => {
     }
     .music-right {
       flex-shrink: 0;
-      margin-right: 15px;
+      padding-right: 20px;
       visibility: hidden;
 
       .iconfont {
         font-size: 22px;
         color: #999;
         cursor: pointer;
-      }
-
-      .icon-sc:hover {
-        color: #F85C55;
-      }
-
-      .icon-sc-act {
-        color: #F85C55;
-      }
-
-      .icon-gengduo {
         margin-left: 20px;
       }
 
-      .icon-gengduo:hover {
+      .iconfont:hover {
         color: $color;
       }
+      .icon-sc:hover {
+        color: #F85C55 !important;
+      }
+
+      .icon-sc-act {
+        color: #F85C55 !important;
+      }
+
     }
   }
 }

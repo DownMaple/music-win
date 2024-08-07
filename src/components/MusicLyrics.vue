@@ -4,7 +4,7 @@
       <div class="left">
         <span class="iconfont icon-xiangxia" @click="musicLyricVisible = false"></span>
       </div>
-      <div class="right" v-if="isWin">
+      <div class="right" v-isWin>
         <MinusOutlined @click="minWindow()"/>
         <FullscreenExitOutlined @click="toggleMaximizeWindow()" v-if="maxWin"/>
         <FullscreenOutlined @click="toggleMaximizeWindow()" v-else/>
@@ -50,7 +50,6 @@ import {parseLyrics, stitchTheImageUrl} from "@/utils";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {getMusicLyricsAPI} from "@/api/music.ts";
 
-const {isWin} = storeToRefs(useWinStore())
 const {isMaxWin: maxWin} = storeToRefs(useWinStore())
 const {musicLyricVisible} = storeToRefs(useLayoutStore())
 const {musicImg, musicTitle, musicId, musicAuthor, musicPlayTimeNum, musicPlay} = storeToRefs(musicStore())

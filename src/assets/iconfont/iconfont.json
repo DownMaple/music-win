@@ -6,6 +6,34 @@
   "description": "tuari 项目",
   "glyphs": [
     {
+      "icon_id": "577382",
+      "name": "喜欢",
+      "font_class": "sc",
+      "unicode": "e761",
+      "unicode_decimal": 59233
+    },
+    {
+      "icon_id": "2076193",
+      "name": "喜欢2",
+      "font_class": "sc-act",
+      "unicode": "e86f",
+      "unicode_decimal": 59503
+    },
+    {
+      "icon_id": "19518247",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e72a",
+      "unicode_decimal": 59178
+    },
+    {
+      "icon_id": "33846358",
+      "name": "下载",
+      "font_class": "xiazai1",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
       "icon_id": "13188714",
       "name": "菜单收起",
       "font_class": "unfold",
@@ -130,20 +158,6 @@
       "font_class": "xiangyou",
       "unicode": "e775",
       "unicode_decimal": 59253
-    },
-    {
-      "icon_id": "627569",
-      "name": "聚收藏",
-      "font_class": "sc",
-      "unicode": "e643",
-      "unicode_decimal": 58947
-    },
-    {
-      "icon_id": "829167",
-      "name": "聚收藏gift",
-      "font_class": "sc-act",
-      "unicode": "e684",
-      "unicode_decimal": 59012
     },
     {
       "icon_id": "5387613",

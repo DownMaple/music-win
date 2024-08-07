@@ -39,7 +39,7 @@
           <div class="music-right">
             <span class="iconfont icon-sc-act" v-if="item.collection"></span>
             <span class="iconfont icon-sc" v-else></span>
-            <span class="iconfont icon-gengduo"></span>
+            <more-menu :id="item.id"></more-menu>
           </div>
         </div>
       </div>
@@ -53,6 +53,7 @@ import {musicStore} from "@/store/modules/music.ts";
 import {ref, watch} from "vue";
 import {useLayoutStore} from "@/store/modules/system.ts";
 import {stitchTheImageUrl} from "@/utils";
+import MoreMenu from "@/components/moreMenu.vue";
 
 const {musicList, musicIndex, musicPlay} = storeToRefs(musicStore())
 const drawerRef = ref<HTMLElement>()
