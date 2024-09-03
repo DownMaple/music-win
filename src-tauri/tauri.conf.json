@@ -12,11 +12,24 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true
+      },
       "shell": {
         "all": false,
         "open": true
       },
       "dialog": {
+        "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["http://**", "https://**"]
+      },
+      "path": {
         "all": true
       },
       "window": {
@@ -49,7 +62,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.myMusic.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

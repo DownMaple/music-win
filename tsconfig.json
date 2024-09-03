@@ -33,7 +33,6 @@
     },
     "types": [
       "node",
-      "element-plus/global",
     ],
     "typeRoots": [
       "./types",
@@ -45,8 +44,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
-    "vite.config.ts"],
+    "src/**/*.vue"
+  ],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

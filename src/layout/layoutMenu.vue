@@ -37,9 +37,21 @@
 
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import {ref, watch} from "vue";
 
 const router = useRouter();
-const path = router.currentRoute.value.fullPath
+const path = ref(router.currentRoute.value.fullPath)
+
+watch(
+    () => router.currentRoute.value.fullPath,
+    (newPath) => {
+      path.value = newPath
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+)
 </script>
 
 <style scoped lang="scss">

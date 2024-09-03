@@ -58,7 +58,7 @@
                   <span class="iconfont icon-sc"></span>
                 </div>
                 <div class="music-right">
-                  <span class="iconfont icon-xiazai" v-downMusicFile:id="item.id"></span>
+                  <span class="iconfont icon-xiazai" @click="tauriDownFile(item.title, item.link)"></span>
                   <more-menu :id="item.id" :font-size="22"></more-menu>
                 </div>
               </div>
@@ -82,6 +82,7 @@ import {onMounted, ref} from "vue";
 import {getSongListOne} from "@/api/songList.ts";
 import {deepCopy, stitchTheImageUrl} from "@/utils";
 import MoreMenu from "@/components/moreMenu.vue";
+import {tauriDownFile} from "@/utils/tauriUtils.ts";
 
 const {musicIndex, musicPlay, musicId , musicList} = storeToRefs(musicStore())
 const router = useRouter()

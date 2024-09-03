@@ -6,6 +6,4 @@ const router = createRouter({
   routes: menus,
 })
 
-
-
 export default router

@@ -2,13 +2,13 @@
   <a-popover v-model:open="visible" trigger="click" placement="bottomLeft">
     <template #content>
       <div class="more-menu-box">
-        <div class="more-menu">
-          <span class="iconfont icon-sc"></span>
-          <span class="txt">我喜欢</span>
+        <div class="more-menu not-hide">
+          <span class="iconfont icon-sc not-hide"></span>
+          <span class="txt not-hide">我喜欢</span>
         </div>
-        <div class="more-menu">
-          <span class="iconfont icon-xiazai1"></span>
-          <span class="txt">下载</span>
+        <div class="more-menu not-hide" @click.stop="hide">
+          <span class="iconfont icon-xiazai1 not-hide"></span>
+          <span class="txt not-hide">下载</span>
         </div>
       </div>
     </template>

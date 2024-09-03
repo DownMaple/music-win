@@ -62,7 +62,7 @@ const {musicListVisible} = storeToRefs(useLayoutStore())
 
 
 // 切换播放音乐
-function playMusic( item:MusicType, index:number) {
+function playMusic(item: MusicType, index: number) {
   if (musicIndex.value === index) {
     musicPlay.value = !musicPlay.value
   } else {
@@ -104,7 +104,9 @@ const handleClickOutside = (event: Event) => {
   // 点击展开按钮同样可以关闭，不然会重复设置
   if (target.classList.contains('iconfont') && target.classList.contains('icon-unfold')) {
     return
-  } else if ( drawerRef.value && drawerContRef.value && drawerContRef.value.contains(target)) {
+  } else if (drawerRef.value && drawerContRef.value && drawerContRef.value.contains(target)) {
+    return;
+  } else if (target.classList.contains('not-hide')){
     return;
   } else {
     closeDrawer();

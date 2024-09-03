@@ -1,7 +1,6 @@
 import userLogin from "@/utils/directive/userLogin.ts";
 import {App, Directive} from "vue";
 import isWin from "@/utils/directive/isWin.ts";
-import downMusicFile from "@/utils/directive/downMusicFile.ts";
 
 type DirectiveMap = {
 	[key: string]: Directive;
@@ -10,7 +9,6 @@ type DirectiveMap = {
 const directive : DirectiveMap = {
 	userLogin,
 	isWin,
-	downMusicFile
 }
 
 export default {

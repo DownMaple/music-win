@@ -1,7 +1,8 @@
-
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{Manager, Window, WindowEvent};
+mod util;
+use tauri::{Manager, WindowEvent};
+use crate::util::path::{get_install_path, select_file_path};
+use crate::util::windows::{is_window_maximized, win_state_change};
 
 fn main() {
     tauri::Builder::default()
@@ -25,18 +26,8 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![is_window_maximized])
+        .invoke_handler(tauri::generate_handler![is_window_maximized, get_install_path, select_file_path])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
 
-
-#[tauri::command]
-fn is_window_maximized(window: Window) -> bool {
-    window.is_maximized().unwrap()
-}
-
-// 监听窗口状态变化
-fn win_state_change(window: Window, is_maximized: bool) {
-    window.emit("windowStateChanged", is_maximized).unwrap();
-}

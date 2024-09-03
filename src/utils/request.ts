@@ -1,12 +1,15 @@
-import axios, {AxiosResponse} from 'axios'
+import axios, {AxiosInstance, AxiosResponse} from 'axios'
 import { config } from '@/utils/config'
 import { useUserStore } from '@/store/modules/user'
 import router from '@/router'
+import axiosTauriApiAdapter from "axios-tauri-api-adapter";
 
-const request = axios.create({
+const request : AxiosInstance = axios.create({
   baseURL: config.baseURL,
   timeout: 10000,
-  headers: { 'Access-Control-Allow-Origin': '*' }
+  headers: { 'Access-Control-Allow-Origin': '*' },
+  adapter: config.baseURL === '/api' ? undefined : axiosTauriApiAdapter
+  // adapter: axiosTauriApiAdapter
 })
 //清求列表（防重复龌交）
 const requestList: Array<string> = []

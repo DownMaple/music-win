@@ -17,3 +17,16 @@
 		border-radius: 10px;
 	}
 }
+:root {
+	--ant-primary-color: #00CC65;  /* 修改主题颜色 */
+	--ant-link-color: #00CC65;     /* 修改链接颜色 */
+}
+
+.setting-box {
+	.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+		color: #00CC65;
+	}
+	.ant-tabs .ant-tabs-ink-bar {
+		background: #00CC65;
+	}
+}

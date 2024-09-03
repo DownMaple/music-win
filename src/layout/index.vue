@@ -1,6 +1,7 @@
 <template>
-  <div ref="winDomRef" class="layout-box " :class="{'layout-win-mini': isWin && !maxWin, 'layout-lyrics-visible': musicLyricVisible}">
-    <div class="layout-bg"  v-if="musicLyricVisible"></div>
+  <div ref="winDomRef" class="layout-box "
+       :class="{'layout-win-mini': isWin && !maxWin, 'layout-lyrics-visible': musicLyricVisible}">
+    <div class="layout-bg" v-if="musicLyricVisible"></div>
     <div class="layout-lyrics" v-if="musicLyricVisible">
       <MusicLyrics></MusicLyrics>
     </div>
@@ -145,9 +146,11 @@ const winDomRef = ref<HTMLElement>()
   background-color: #fff;
   box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.07);
 }
+
 .layout-lyrics-visible {
   color: #fff;
 }
+
 html.dark .layout-box {
   .layout-main {
     background-color: rgba(0, 0, 0, 0) !important;

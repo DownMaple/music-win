@@ -15,6 +15,11 @@ export const menus = [
         path: '/songList/:id',
         name: 'SongList',
         component: () => import('@/views/system/songList.vue')
+      },
+      {
+        path: '/setting',
+        name: 'Setting',
+        component: () => import('@/views/system/setting.vue')
       }
       // {
       //   path: '/:pathMatch(.*)*',

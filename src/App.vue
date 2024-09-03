@@ -1,18 +1,17 @@
 <template>
   <div class="app">
-    <router-view :key="key"/>
+    <router-view/>
   </div>
 </template>
 <script setup>
-import {computed, onMounted} from "vue";
-import { useRoute} from "vue-router";
+import {onMounted} from "vue";
 import {useWinStore} from "@/store/modules/system.ts";
 
 // 解决切换白屏问题
-const route = useRoute();
-const key = computed(() => {
-  return route.path + Math.random();
-});
+// const route = useRoute();
+// const key = computed(() => {
+//   return route.path + Math.random();
+// });
 
 onMounted(() => {
   useWinStore().setIsWin(Boolean(window?.__TAURI__))
