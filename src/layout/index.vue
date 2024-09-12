@@ -45,6 +45,9 @@ const {musicList} = storeToRefs(musicStore())
 
 const winDomRef = ref<HTMLElement>()
 
+
+
+
 </script>
 
 <style scoped lang="scss">

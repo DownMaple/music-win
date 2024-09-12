@@ -22,11 +22,12 @@ pub fn read_config() -> Config {
     }
 }
 
-pub fn update_config_key(key: &str , value: &str) {
+/// 更新配置文件 的某个配置项
+pub fn update_config_key(key: &str, value: &str) -> Result<(), Box<dyn std::error::Error>>  {
     let config_path = "config.json";
     let config_data = fs::read_to_string(config_path).expect("无法读取配置文件");
     // 解析为 serde_json::Value 类型，方便操作其中的字段
-    let mut config_json:Value = serde_json::from_str(&config_data).expect("无法解析配置文件");
+    let mut config_json: Value = serde_json::from_str(&config_data).expect("无法解析配置文件");
     // 更新指定字段的值
     if let Some(field) = config_json.get_mut(key) {
         *field = Value::String(value.to_string());
@@ -34,4 +35,19 @@ pub fn update_config_key(key: &str , value: &str) {
         println!("字段 '{}' 不存在于配置文件中", key);
     }
     fs::write(config_path, config_json.to_string()).expect("无法写入配置文件");
+    Ok(())
+}
+
+/// 获取配置文件 的某个配置项
+pub fn get_config_key(key: &str) -> Result<Option<String>, Box<dyn std::error::Error>> {
+    let config_path = Path::new("config.json");
+
+    // 读取配置文件内容
+    let config_data = fs::read_to_string(config_path)?;
+
+    // 解析为 serde_json::Value 类型，方便操作其中的字段
+    let config_json: Value = serde_json::from_str(&config_data)?;
+
+    // 获取指定字段的值
+    Ok(config_json.get(key).and_then(|value| value.as_str()).map(|s| s.to_string()))
 }

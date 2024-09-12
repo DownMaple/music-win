@@ -4,6 +4,7 @@ export const config = {
   baseURL: import.meta.env.VITE_APP_URL,
   uploadUrl: import.meta.env.VITE_APP_UPLOAD,
   uploadFile: import.meta.env.VITE_APP_UPLOADFILE,
+  tauriDownFile: import.meta.env.VITE_APP_TAURI_DOWNLOAD,
   editorUpload: import.meta.env.VITE_APP_RICH ,// 富文本文件上传
   editorUploadVideo: import.meta.env.VITE_APP_RICH_VIDEO // 富文本视频上传
 }

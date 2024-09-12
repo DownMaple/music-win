@@ -29,7 +29,7 @@
       <router-link to="" class="menu-list__item">
         <FolderOutlined/>
         <FolderFilled/>
-        <span class="span">本地和下载</span>
+        <span class="span" @click="getDownloadHistory">本地和下载</span>
       </router-link>
     </div>
   </div>
@@ -38,6 +38,7 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
+import {getDownloadHistory} from "@/utils/tauriUtils.ts";
 
 const router = useRouter();
 const path = ref(router.currentRoute.value.fullPath)

@@ -1,6 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod util;
+mod db;
+
 use tauri::{Manager, WindowEvent};
+use crate::util::file::{download_file, download_history_list};
 use crate::util::path::{get_install_path, select_file_path};
 use crate::util::windows::{is_window_maximized, win_state_change};
 
@@ -26,7 +29,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![is_window_maximized, get_install_path, select_file_path])
+        .invoke_handler(tauri::generate_handler![is_window_maximized, get_install_path, select_file_path, download_file, download_history_list])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

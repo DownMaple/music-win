@@ -26,7 +26,7 @@
             <span>更多</span>
           </div>
           <div class="sl-up__num">
-            歌曲数量：{{songListMusic.length}}
+            歌曲数量：{{ songListMusic.length }}
           </div>
         </div>
       </div>
@@ -39,7 +39,8 @@
           <div class="sl-table__th">时长</div>
         </div>
         <div class="sl-table-tbody">
-          <div class="sl-table-tr" :class="{'sl-table-tr-act':item.id === musicId}" v-for="item in songListMusic" :key="item.id">
+          <div class="sl-table-tr" :class="{'sl-table-tr-act':item.id === musicId}" v-for="item in songListMusic"
+               :key="item.id">
             <div class="sl-table__td">
               <div class="music-item">
                 <div class="music-left">
@@ -59,7 +60,7 @@
                 </div>
                 <div class="music-right">
                   <span class="iconfont icon-xiazai" @click="tauriDownFile(item.title, item.link)"></span>
-                  <more-menu :id="item.id" :font-size="22"></more-menu>
+                  <more-menu :id="item.id" :title="item.title" :link="item.link" :font-size="22"></more-menu>
                 </div>
               </div>
             </div>
@@ -84,7 +85,7 @@ import {deepCopy, stitchTheImageUrl} from "@/utils";
 import MoreMenu from "@/components/moreMenu.vue";
 import {tauriDownFile} from "@/utils/tauriUtils.ts";
 
-const {musicIndex, musicPlay, musicId , musicList} = storeToRefs(musicStore())
+const {musicIndex, musicPlay, musicId, musicList} = storeToRefs(musicStore())
 const router = useRouter()
 const id = ref(0)
 const songListData = ref<SongListType>({
@@ -105,7 +106,7 @@ function playMusic(music: MusicType) {
   if (listIndex >= 0) {
     musicStore().changeMusic(listIndex)
   } else {
-    musicList.value.splice(musicIndex.value + 1, 0 ,music)
+    musicList.value.splice(musicIndex.value + 1, 0, music)
     musicStore().changeMusic(musicIndex.value + 1)
   }
 }
@@ -122,7 +123,6 @@ onMounted(() => {
   id.value = Number(router.currentRoute.value.params.id)
   init()
 })
-
 
 
 </script>
@@ -284,6 +284,7 @@ onMounted(() => {
           color: #666;
         }
       }
+
       .sl-table-tr:nth-child(even) {
         background-color: #f6f6f6;
       }
@@ -343,6 +344,7 @@ onMounted(() => {
     .music-msg {
       flex: 1;
       margin-right: 15px;
+
       .name {
         font-size: 14px;
         word-break: break-all;
@@ -365,6 +367,7 @@ onMounted(() => {
         overflow: hidden;
       }
     }
+
     .music-right-center {
       flex-shrink: 0;
 
@@ -382,6 +385,7 @@ onMounted(() => {
         color: #F85C55;
       }
     }
+
     .music-right {
       flex-shrink: 0;
       padding-right: 20px;
@@ -397,6 +401,7 @@ onMounted(() => {
       .iconfont:hover {
         color: $color;
       }
+
       .icon-sc:hover {
         color: #F85C55 !important;
       }
@@ -431,6 +436,7 @@ onMounted(() => {
       display: flex !important;
     }
   }
+
   .name {
     color: $color !important;
   }
@@ -442,6 +448,7 @@ onMounted(() => {
   .music-right {
     visibility: visible;
   }
+
   .sl-table__td {
     color: $color !important;
   }

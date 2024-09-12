@@ -42,7 +42,7 @@ pub async fn select_file_path() -> Res<String> {
         .pick_folder()
     {
         // 将用户设置的路径保存到配置文件中
-        update_config_key("download_directory", folder_path.to_str().unwrap());
+        update_config_key("download_directory", folder_path.to_str().unwrap()).expect("TODO: panic message");
         // 将路径转换为字符串并返回
         match folder_path.to_str() {
             Some(folder_path_str) => res_message(folder_path_str.to_string()),
@@ -50,5 +50,16 @@ pub async fn select_file_path() -> Res<String> {
         }
     } else {
         res_error("用户未选择文件夹".to_string())
+    }
+}
+
+/// 解析路径，如果是相对路径，则转换为绝对路径
+pub fn resolve_path(path: &str) -> Result<PathBuf, String> {
+    let path_buf = PathBuf::from(path);
+    if path_buf.is_absolute() {
+        Ok(path_buf)
+    } else {
+        let absolute_path = env::current_dir().map_err(|e| e.to_string())?.join(path_buf);
+        Ok(absolute_path)
     }
 }

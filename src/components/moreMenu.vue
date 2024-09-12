@@ -6,7 +6,7 @@
           <span class="iconfont icon-sc not-hide"></span>
           <span class="txt not-hide">我喜欢</span>
         </div>
-        <div class="more-menu not-hide" @click.stop="hide">
+        <div class="more-menu not-hide" @click.stop="() => {tauriDownFile(props.title, props.link); hide()}">
           <span class="iconfont icon-xiazai1 not-hide"></span>
           <span class="txt not-hide">下载</span>
         </div>
@@ -18,12 +18,9 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
+import {tauriDownFile} from "@/utils/tauriUtils.ts";
 
 const visible = ref<boolean>(false);
-
-const hide = () => {
-  visible.value = false;
-};
 
 const props = defineProps({
   id: {
@@ -34,7 +31,19 @@ const props = defineProps({
     type: Number,
     default: 20,
   },
+  title: {
+    type: String,
+    default: "",
+  },
+  link: {
+    type: String,
+    default: "",
+  },
 });
+
+const hide = () => {
+  visible.value = false;
+};
 </script>
 
 <style scoped lang="scss">
@@ -43,25 +52,31 @@ const props = defineProps({
   color: #999;
   font-size: 18px;
 }
+
 .icon-gengduo:hover {
   color: $color;
 }
+
 .more-menu-box {
   padding: 10px 0;
+
   .more-menu {
     width: 160px;
     padding: 8px 20px;
     display: flex;
     cursor: pointer;
+
     .iconfont {
       margin-right: 10px;
       font-size: 16px;
       flex-shrink: 0;
     }
+
     .txt {
       flex: 1;
     }
   }
+
   .more-menu:hover {
     background-color: #f2f2f2;
   }

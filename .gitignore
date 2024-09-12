@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 /public/music/
 .history
+/src-tauri/app_data.db

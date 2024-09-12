@@ -116,7 +116,7 @@ export async function printTable(data: any, url: string, fileName: string) {
  * @param {string} url    下载文件的路径
  * @param {object} data    下载文件需要的参数
  */
-export function tableDownFile(name: string, url: string, data: object = {}) {
+export function urlDownFile(name: string, url: string, data: object = {}) {
 	const xhr = new XMLHttpRequest()
 	xhr.open('GET', config.baseURL + url, true)
 	xhr.setRequestHeader('Authorization', useUserStore().token)
