@@ -20,6 +20,10 @@ export const menus = [
         path: '/setting',
         name: 'Setting',
         component: () => import('@/views/system/setting.vue')
+      },{
+        path: '/localAndDownload',
+        name: 'localAndDownload',
+        component: () => import('@/views/system/localAndDownload.vue')
       }
       // {
       //   path: '/:pathMatch(.*)*',

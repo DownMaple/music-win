@@ -1,12 +1,18 @@
 <template>
-  <div class="app">
-    <router-view/>
-  </div>
+  <a-config-provider :locale="zhCN">
+    <div class="app">
+      <router-view/>
+    </div>
+  </a-config-provider>
+
 </template>
 <script setup>
 import {onMounted} from "vue";
 import {useWinStore} from "@/store/modules/system.ts";
-
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+dayjs.locale('zh-cn');
 // 解决切换白屏问题
 // const route = useRoute();
 // const key = computed(() => {

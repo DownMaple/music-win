@@ -6,7 +6,7 @@
           <span class="iconfont icon-sc not-hide"></span>
           <span class="txt not-hide">我喜欢</span>
         </div>
-        <div class="more-menu not-hide" @click.stop="() => {tauriDownFile(props.title, props.link); hide()}">
+        <div v-if="props.isShowDown" class="more-menu not-hide" @click.stop="() => {tauriDownFile(props.title, props.link); hide()}">
           <span class="iconfont icon-xiazai1 not-hide"></span>
           <span class="txt not-hide">下载</span>
         </div>
@@ -39,6 +39,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  isShowDown: {
+    type: Boolean,
+    default: true
+  }
 });
 
 const hide = () => {

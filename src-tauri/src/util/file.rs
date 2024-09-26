@@ -4,6 +4,7 @@ use std::io::Write;
 use futures::StreamExt;
 use reqwest::Client;
 use tauri::{command};
+use log::log;
 use crate::db::connection::{get_download_history, insert_download_history, update_download_history, DownloadHistory};
 use crate::util::config::{get_config_key, update_config_key};
 use crate::util::path::resolve_path;
@@ -12,14 +13,14 @@ use crate::util::res::{res_data, res_error, res_message, Res};
 #[command]
 pub async fn download_file(name:String, url: String) -> Res<String> {
     let client = Client::new();
-    let response = client.get(&url).send().await.expect("请求失败");
 
+    let response = client.get(&url).send().await.expect("请求失败");
     if !response.status().is_success() {
-        return res_message("下载失败")
+        return res_error("下载失败")
     }
 
-    let total_size = response.content_length().expect("文件大小获取失败");
 
+    let total_size = response.content_length().expect("文件大小获取失败");
     let download_directory = match get_config_key("download_directory") {
         Ok(Some(dir)) => dir,
         Ok(None) => {
@@ -51,7 +52,7 @@ pub async fn download_file(name:String, url: String) -> Res<String> {
     let mut downloaded:u64 = 0;
     let mut stream = response.bytes_stream();
 
-    let download_history_data: DownloadHistory = insert_download_history(name, url, download_path.to_string_lossy().to_string() , 0).expect("记录下载数据失败").await;
+    let download_history_data: DownloadHistory = insert_download_history(name, url, download_path.to_string_lossy().to_string() , 0).await.expect("记录下载数据失败");
 
     while let Some(chunk) = stream.next().await {
         let chunk = chunk;
@@ -65,16 +66,17 @@ pub async fn download_file(name:String, url: String) -> Res<String> {
 
                 // 计算并显示下载进度
                 let progress = (downloaded as f64 / total_size as f64) * 100.0;
-                print!("\rDownloading: {:.2}%", progress);
+                print!("\rDownloading: {:.1}%", progress);
                 io::stdout().flush().expect("刷新标准输出失败");
             }
             Err(_) => {
-                update_download_history(download_history_data.id, (downloaded as f64 / total_size as f64) * 100.0 , 3).expect("修改下载状态失败");
+                update_download_history(download_history_data.id, ((downloaded as f64 / total_size as f64) * 100.0) as i32, downloaded, 3).expect("修改下载状态失败");
                 return res_error("下载失败");
             }
         }
     }
-    update_download_history(download_history_data.id, 100.0 , 2).expect("修改下载状态失败");
+    // println!("下载完成：{}", downloaded);
+    update_download_history(download_history_data.id, 100, downloaded, 0).expect("修改下载状态失败");
     res_message("文件下载完成")
 }
 
